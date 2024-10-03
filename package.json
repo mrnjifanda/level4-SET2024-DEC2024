@@ -1,0 +1,11 @@
+{
+  "name": "level4-app",
+  "version": "1.0.0",
+  "description": "Firts level4 application with Node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Seven Advanced Academy",
+  "license": "ISC"
+}
