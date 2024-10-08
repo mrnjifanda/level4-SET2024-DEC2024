@@ -1,0 +1,14 @@
+{
+  "name": "firts-api",
+  "version": "1.0.0",
+  "description": "Firts api for level 4 ",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mr NJIFANDA",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.0"
+  }
+}
