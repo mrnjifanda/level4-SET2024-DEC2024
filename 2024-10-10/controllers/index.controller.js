@@ -4,10 +4,4 @@ const welcome =  (request, response) => {
     })
 }
 
-const aboutUs = (request, response) => {
-    response.json({
-        message: "This is About us page"
-    });
-}
-
-module.exports = { welcome, aboutUs };
+module.exports = { welcome };
