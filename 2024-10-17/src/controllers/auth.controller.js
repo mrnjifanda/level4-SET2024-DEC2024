@@ -12,7 +12,7 @@ const login = async (req, res) => {
 
 const register = async (req, res) => {
     const create = await authService.register(req.body);
-    response.status(201).json(create);
+    res.status(201).json(create);
 };
 
 module.exports = { login, register };
