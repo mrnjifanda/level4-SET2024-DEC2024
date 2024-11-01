@@ -1,6 +1,23 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const  User = require('../models/User');
+const UserOTP = require('../models/UserOTP');
+
+const random = (length) => {
+
+    const characters = "1234567890AZERTYUIOPQSDFGHJKLMWXCVBN";
+    let code = '';
+    for ( let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        code += characters.charAt(randomIndex);
+    }
+
+    return code;
+}
+
+const generateExpire = (minutes) => {
+    return new Date(new Date().getTime() + (60 * 1000 * minutes));
+} 
 
 const hashPassword = async (password) => {
     try {
@@ -72,4 +89,78 @@ const login = async (user, password) => {
     }
 }
 
-module.exports = { verifyIfIsUnique, register, login, tokenVerify };
+const generateOTP = async (id_user) => {
+
+    try {
+        const otp = {
+            code: random(5),
+            expired_at: generateExpire(10),
+            id_user: id_user
+        }
+        await UserOTP.create(otp);
+        return {
+            error: false,
+            data: otp
+        };
+    } catch (error) {
+        return {
+            error: true,
+            message: 'Failed to generate OTP.'
+        };
+    }
+}
+
+const verifyOTP = async (email, code) => {
+
+    const userOTP = await UserOTP.findOne({ code: code, expired_at: { $gt : new Date() } })
+                                 .populate({ path: 'id_user',  select : { email: 1 }});
+
+    if (userOTP && userOTP.id_user.email === email) {
+        return true;
+    }
+
+    return false;
+}
+
+const resetPassword = async (password, code) => {
+
+    try {
+        const userOTP = await UserOTP.findOne({ code: code });
+        if (!userOTP) {
+            return {
+                error: true,
+                message: 'Invalid OTP.'
+            };
+        }
+    
+        const user = await User.findById(userOTP.id_user);
+        if (!user) {
+            return {
+                error: true,
+                message: 'User not found.'
+            };
+        }
+    
+        user.password = hashPassword(password);
+        await user.save();
+        await UserOTP.deleteOne({ _id: userOTP._id });
+    
+        return {
+            error: false,
+            message: 'Password reset successfully.',
+            data: {
+                email: user.email
+            }
+        };
+    } catch (error) {
+        return {
+            error: true,
+            message: 'Failed to reset password: ' + error.message
+        };
+    }
+}
+
+module.exports = {
+    verifyIfIsUnique, register, login, tokenVerify,
+    generateOTP, verifyOTP, resetPassword
+};

@@ -15,4 +15,25 @@ const register = async (req, res) => {
     res.status(201).json(create);
 };
 
-module.exports = { login, register };
+const forgotPassword = async (req, res) => {
+
+    const otp = await authService.generateOTP(req.user._id);
+    const status = otp.error ? 400 : 200;
+    return res.status(status).json(otp);
+}
+
+const verifyOTP = async (req, res) => {
+    return res.status(202).json({
+        error:false,
+        message: 'OTP is already valide.'
+    });
+}
+
+const resetPassword = async (req, res) => {
+
+    const { password, code } = req.body;
+    const reset = await authService.resetPassword(password, code);
+    return res.status(reset.error? 400 : 200).json(reset);
+}
+
+module.exports = { login, register, forgotPassword, verifyOTP, resetPassword };

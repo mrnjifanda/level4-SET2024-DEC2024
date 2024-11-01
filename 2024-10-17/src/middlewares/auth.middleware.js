@@ -89,5 +89,56 @@ const verifyIfUserIsLogged = async (req, res, next) => {
     next();
 };
 
-module.exports = { verifyLoginBody, verifyRegisterBody, verifyIfUserIsLogged };
+const verifyEmail = async (req, res, next) => {
+
+    const { email } = req.body;
+    const user = await authService.verifyIfIsUnique('email', email);
+    if (!user) {
+        return res.status(400).json({
+            error: true,
+            message: 'Email not found !!!'
+        });
+    }
+
+    req.user = user;
+    next();
+}
+
+const verifyOTP = async (req, res, next) => {
+    
+    const { email, code } = req.body;
+    const verify = await authService.verifyOTP(email, code);
+    if (!verify) {
+        return res.status(400).json({
+            error: true,
+            message: 'Invalid OTP.'
+        });
+    }
+
+    next();
+}
+
+const verifyPassword = async (req, res, next) => {
+    const { password, password_confirm, code } = req.body;
+    if (!code) {
+        res.status(400).json({
+            error: true,
+            message: 'Please enter code'
+        });
+    }
+
+    if (password !== password_confirm) {
+        res.status(400).json({
+            error: true,
+            message: 'Passwords do not match.'
+        });
+    }
+
+    next();
+}
+
+module.exports = { 
+    verifyLoginBody, verifyRegisterBody, verifyIfUserIsLogged,
+    verifyEmail, verifyOTP, verifyPassword
+};
 

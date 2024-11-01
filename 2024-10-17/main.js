@@ -1,8 +1,9 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
-mongoose.connect('mongodb://localhost:27017/level4_auth')
+mongoose.connect(process.env.DATABASE_URL)
     .then(connection => {
         
         const app = express();
@@ -17,8 +18,8 @@ mongoose.connect('mongodb://localhost:27017/level4_auth')
         app.use('/api/auth', authRoute);
         app.use('/api/admin', adminRoute);
 
-        app.listen(3000, () => {
-            console.log("Application listening on http://localhost:3000");
+        app.listen(process.env.PORT, () => {
+            console.log("Application listening on http://localhost:" + process.env.PORT);
             
         });
     })
