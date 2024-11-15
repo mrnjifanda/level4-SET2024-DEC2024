@@ -1,0 +1,20 @@
+<h1>Welcome: {{ title }}</h1>
+<h2>Variable hello word: {{ hello }}</h2>
+
+
+<button type="button" (click)="updateHello()">Update title</button>
+
+<br>
+<a routerLink="/users">Users</a>
+<br>
+<a routerLink="/about-us">About us</a>
+
+
+<br>
+<button type="button" (click)="api()">Call API</button>
+
+<br>
+<button type="button" (click)="apiWithHttpClient()">Call API with HTTPClient</button>
+
+
+<router-outlet />
