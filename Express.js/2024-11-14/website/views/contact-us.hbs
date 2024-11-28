@@ -1,7 +1,13 @@
 <h1>{{title}}</h1>
 <p>Welcome to {{title}}</p>
 
-<form action="/submit-form" method="post">
+{{#if message}}
+    <div class="message">
+        <p>{{message}}</p>
+    </div>
+{{/if}}
+
+<form action="/submit-form" method="post" class="submit-form">
     <input type="text" name="name" placeholder="Name">
     <input type="email" name="email" placeholder="Email">
     <input type="text" name="subject" placeholder="Subject">
