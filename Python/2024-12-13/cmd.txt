@@ -1,0 +1,24 @@
+Create environmet
+    Linux/macOs: python3 -m venv .venv
+    Windows: py -3 -m venv .venv
+
+Activate th environmet
+    Linux/macOs: . .venv/bin/activate
+    Windows: .venv\Scripts\activate
+
+Install Flask
+    pip install Flask
+
+Install database packages
+    pip install flask-sqlalchemy flask-migrate flask-mysqldb
+
+Initialise Database migration (Note: you rou this command only one time in your project)
+    flask db init
+
+Generate one migration (Note: Make sure you already create the databse before run this command)
+    flask db migrate -m "Migration message"
+
+Apply migrations in the database
+    flask db upgrade
+
+
